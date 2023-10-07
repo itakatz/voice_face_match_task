@@ -12,6 +12,9 @@ import argparse
 
 import voice_face_match as vfm
 
+#--- DO NOT EDIT (these parameters are used for testing from a different script - TODO)
+CFG = dict(input_layer_size = 256, dropout = 0.5, loss_fn = nn.BCEWithLogitsLoss())
+
 def main(data_file_name, results_folder, num_epochs):
     ''' Data files:
             data_num_neg_pp_1.pickle' - sample 1 negative face per positive sample
@@ -37,7 +40,7 @@ def main(data_file_name, results_folder, num_epochs):
     batch_sz = 64
     #num_epochs = 100 # this is now input arg
     learning_rate = 0.001
-    cfg = dict(input_layer_size = 256, dropout = 0.5)
+    cfg = CFG
     
     if train_over_pairs:
         random_switch_faces = False 
@@ -63,7 +66,7 @@ def main(data_file_name, results_folder, num_epochs):
         VoiceFaceModel = vfm.VoiceFaceTripletsClassifier
         
     model = VoiceFaceModel(dims[0], dims[1], cfg)
-    loss_fn = nn.BCEWithLogitsLoss() # TODO impl a label smoothing class
+    loss_fn = cfg['loss_fn'] #nn.BCEWithLogitsLoss() # TODO impl a label smoothing class
     optimizer = optim.Adam(model.parameters(), lr = learning_rate)
     sched = ExponentialLR(optimizer, gamma = 0.995, last_epoch=-1)
 
