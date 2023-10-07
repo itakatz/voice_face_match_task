@@ -44,6 +44,7 @@ def main(args):
     use_cuda = torch.cuda.is_available()
     voice_embed, face1_embed, face2_embed, labels = [torch.Tensor(x.astype(np.float32)) for x in [voice_embed, face1_embed, face2_embed, labels]]
     if use_cuda:
+        model.cuda()
         voice_embed, face1_embed, face2_embed, labels = [x.cuda() for x in [voice_embed, face1_embed, face2_embed, labels]]
         
     dataset = torch.utils.data.TensorDataset(voice_embed, face1_embed, face2_embed, labels)
