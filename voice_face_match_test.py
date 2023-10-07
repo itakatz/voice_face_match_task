@@ -40,13 +40,16 @@ def main(args):
     model = vfm.VoiceFaceTripletsClassifier(voice_dim, face_dim, CFG)
     model.load_state_dict(torch.load(args.model_file))
 
-    #--- prepare data loader for the eval_model method    
+    #--- prepare data loader for the eval_model method
+    use_cuda = torch.cuda.is_available()
     voice_embed, face1_embed, face2_embed, labels = [torch.Tensor(x.astype(np.float32)) for x in [voice_embed, face1_embed, face2_embed, labels]]
+    if use_cuda:
+        voice_embed, face1_embed, face2_embed, labels = [x.cuda() for x in [voice_embed, face1_embed, face2_embed, labels]]
+        
     dataset = torch.utils.data.TensorDataset(voice_embed, face1_embed, face2_embed, labels)
     dataloader = torch.utils.data.DataLoader(dataset, batch_size = 64, shuffle = False)  
     
     loss_fn = CFG['loss_fn']
-    use_cuda = torch.cuda.is_available()
     
     loss, accuracy = vfm.eval_model(model, loss_fn, dataloader, use_cuda)
     print(f'test loss: {loss:.3f} test accuracy: {accuracy:.3f}')
