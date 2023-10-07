@@ -26,3 +26,15 @@ final model (validation set): loss 0.684 acc 0.551
 best model  (validation set): loss 0.684 acc 0.551
 best model  (test set):       loss 0.683 acc 0.552
 ```
+
+# Test model
+run the script:
+```
+bash scripts/test.sh
+```
+The repository contains a trained model and a small test data file (64 samples) with embeddings, as an example to the expected format. 
+Test file should contain 4 numpy arrays: `voice_embed, face1_embed, face2_embed, labels`, with samples indexed by the first dimension.
+It can be loaded by:
+```
+voice_embed, face1_embed, face2_embed, labels = pickle.load(open(args.input_test_file, 'rb'))
+```

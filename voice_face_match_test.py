@@ -12,6 +12,8 @@ def main(args):
         print(f'failed loading test data from file, error: {e}')
         return
 
+    print(f'loaded {labels.shape[0]} test samples')
+    
     voice_dim = 192
     face_dim = 512
     
