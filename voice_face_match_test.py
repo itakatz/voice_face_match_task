@@ -1,6 +1,7 @@
 import argparse
 import pickle
 import torch
+import numpy as np
 
 import voice_face_match as vfm
 from voice_face_match_train import CFG # TODO cfg should be saved with the model, this is prone to bugs
@@ -16,7 +17,10 @@ def main(args):
     
     voice_dim = 192
     face_dim = 512
-    
+
+    if len(labels.shape) == 1:
+        labels = labels[:, np.newaxis]
+
     if voice_embed.shape[1] == voice_dim:
         pass
     elif voice_embed.shape[0] == voice_dim:
@@ -37,7 +41,7 @@ def main(args):
     model.load_state_dict(torch.load(args.model_file))
 
     #--- prepare data loader for the eval_model method    
-    voice_embed, face1_embed, face2_embed, labels = [torch.Tensor(x) for x in [voice_embed, face1_embed, face2_embed, labels]]
+    voice_embed, face1_embed, face2_embed, labels = [torch.Tensor(x.astype(np.float32)) for x in [voice_embed, face1_embed, face2_embed, labels]]
     dataset = torch.utils.data.TensorDataset(voice_embed, face1_embed, face2_embed, labels)
     dataloader = torch.utils.data.DataLoader(dataset, batch_size = 64, shuffle = False)  
     

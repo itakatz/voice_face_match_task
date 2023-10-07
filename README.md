@@ -36,5 +36,5 @@ The repository contains a trained model and a small test data file (64 samples) 
 Test file should contain 4 numpy arrays: `voice_embed, face1_embed, face2_embed, labels`, with samples indexed by the first dimension.
 It can be loaded by:
 ```
-voice_embed, face1_embed, face2_embed, labels = pickle.load(open(args.input_test_file, 'rb'))
+voice_embed, face1_embed, face2_embed, labels = pickle.load(open('test_data/test_data.pickle', 'rb'))
 ```
