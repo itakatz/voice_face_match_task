@@ -1,8 +1,21 @@
+# Setup docker
+You may need to use sudo for the docker scripts
+### Build docker image
+```
+bash scripts/build_docker.sh
+```
+### Run docker image
+```
+bash scripts/run_docker.sh
+```
+
 # Prepare data for learning
-run the script for data preparation, make sure path for embedding files (voice and image) are correct:
+This step is needed for training a model from new embedding files (voice and image), so for testing this step can be skipped. Note that embedding files are not part of the docker image, so you'll have to make them available in the docker container and make sure the path for embedding files in the script is correct.
+Run the script for data preparation:
 ```
 bash scripts/prepare_dataset.py
 ```
+An example output file **is** included in the docker image, under `data/data_num_neg_pp_2.pickle`.
 
 # Train model
 run the script for training, optionally edit to set input file, results folder, and number of epochs
@@ -10,7 +23,7 @@ run the script for training, optionally edit to set input file, results folder, 
 bash scripts/train.sh
 ```
 
-Output example for a short test run (3 epochs):
+Output example for a short toy run (3 epochs):
 ```
 input data file: data/data_num_neg_pp_2.pickle
 saving results to folder: saved_models_TMP/num_neg_pp_2
@@ -32,9 +45,10 @@ run the script:
 ```
 bash scripts/test.sh
 ```
-The repository contains a trained model and a small test data file (64 samples) with embeddings, as an example to the expected format. 
+
+The repository contains a trained model and a small test data file (64 samples) with embeddings, as an example to the expected input format. 
 Test file should contain 4 numpy arrays: `voice_embed, face1_embed, face2_embed, labels`, with samples indexed by the first dimension.
-It can be loaded by:
+It is loaded by:
 ```
 voice_embed, face1_embed, face2_embed, labels = pickle.load(open('test_data/test_data.pickle', 'rb'))
 ```
